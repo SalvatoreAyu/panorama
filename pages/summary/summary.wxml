@@ -1,0 +1,24 @@
+<!--pages/summary/summary.js.wxml-->
+<view>
+  <van-nav-bar title="标签查看" left-text="返回" left-arrow bind:click-left="onClickLeft" />
+  <van-card class="label-card" wx:for="{{labelArray}}" wx:key="title" desc="{{item.desc}}" title="{{item.title}}" thumb="{{ item.thumb }}">
+    <view slot="price-top">
+      <view>
+        <van-tag plain round type="primary">X坐标</van-tag>
+        <text>{{" "+item.position.x}}</text>
+      </view>
+      <view>
+        <van-tag plain round type="primary">Y坐标</van-tag>
+        <text>{{" "+item.position.y}}</text>
+      </view>
+      <view>
+        <van-tag plain round type="primary">Z坐标</van-tag>
+        <text>{{" "+item.position.z}}</text>
+      </view>
+    </view>
+    <view slot="footer">
+      <!-- <van-button round size="mini" type="danger" style="margin-right: 30rpx;">删除标签</van-button> -->
+      <van-button round size="mini" type="info" data-indexes="{{item.title}}" bind:click="onCopyBtnClcik">一键复制</van-button>
+    </view>
+  </van-card>
+</view>

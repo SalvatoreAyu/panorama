@@ -1,0 +1,58 @@
+/* pages/label/label.wxss */
+.label-wrapper {
+  height: 100vh;
+  position: relative;
+}
+
+.basic-wrapper {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  position: relative;
+}
+
+.txt:before,
+.txt:after {
+  position: absolute;
+  background: var(--nav-bar-text-color, #1989fa);
+  content: "";
+  height: 1px;
+  top: 50%;
+  width: 100px;
+}
+
+.txt:before {
+  left: 10px;
+}
+
+.txt:after {
+  right: 10px;
+}
+
+.txt {
+  color: rgb(22, 22, 22);
+  font-weight: 500;
+}
+
+.label-btn-wrapper {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.label-btn {
+  width: 50%;
+  bottom: 0;
+  position: relative;
+  /* flex: 1; */
+}
+
+.label-btn button {
+  width: 50%;
+  height: 100rpx;
+  position: fixed;
+  /* top: 100rpx; */
+  bottom: 100rpx;
+  /* border-radius: 5% 5% 0 0; */
+}

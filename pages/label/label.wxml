@@ -1,0 +1,47 @@
+<!--pages/label/label.wxml-->
+<van-nav-bar title="新增标签" left-text="返回" left-arrow bind:click-left="onClickLeft" />
+<view class="label-wrapper">
+  <view class="basic-container">
+    <view class="basic-wrapper">
+      <view class="txt">基本信息</view>
+    </view>
+    <van-cell-group>
+      <van-field style="font-size: 30rpx;" required="true" left-icon="flag-o" label="名称" autosize value="{{ title }}" placeholder="请输入标签名" border="{{ false }}" error-message="{{errorTitleMsg}}" bind:change="onTitleChange" />
+    </van-cell-group>
+    <van-cell-group>
+      <van-field style="font-size: 30rpx;" required="true" left-icon="edit" label="描述" show-word-limit="true" maxlength="200" clearable="true" autosize value="{{ desc }}" type="textarea" placeholder="请输入标签描述" border="{{ false }}" error-message="{{errorDescMsg}}" bind:change="onDescChange" />
+    </van-cell-group>
+    <view style="display: flex;flex-direction: row;justify-content: space-between; align-items: center;">
+      <view style="display: flex;">
+        <van-icon name="photo-o" style="padding:0 5rpx 0 20rpx" />
+        <view style="color: var(--field-label-color,#646566);font-size: 30rpx;">图片(可选)</view>
+      </view>
+      <view>
+        <van-radio-group value="{{ radio }}" bind:change="onRadioChange" direction="horizontal">
+          <van-radio name="src">src链接</van-radio>
+          <van-radio name="file">本地文件</van-radio>
+        </van-radio-group>
+      </view>
+    </view>
+    <view style="margin-top: 30rpx;">
+      <van-field wx:if="{{radio=='src'}}" left-icon="edit" style="font-size: 30rpx;" label="链接" clearable="true" autosize value="{{ src }}" placeholder="请输入图片url链接" border="{{ false }}" bind:change="onSrcChange" />
+      <van-uploader wx:else file-list="{{ fileList }}" max-count="1" bind:after-read="afterRead" />
+    </view>
+
+  </view>
+  <view class="postion-container">
+    <view class="basic-wrapper">
+      <view class="txt">位置信息</view>
+    </view>
+    <van-cell-group>
+      <van-field style="font-size: 30rpx;" disabled label="三维坐标X" autosize value="{{ position.x }}" placeholder="请输入标签名" border="{{ false }}" />
+      <van-field style="font-size: 30rpx;" disabled label="三维坐标Y" autosize value="{{ position.y }}" placeholder="请输入标签名" border="{{ false }}" />
+      <van-field style="font-size: 30rpx;" disabled label="三维坐标Z" autosize value="{{ position.z }}" placeholder="请输入标签名" border="{{ false }}" />
+    </van-cell-group>
+  </view>
+  <view class="label-btn-wrapper">
+    <van-button class="label-btn" type="danger" bind:click="onCancelClcik">取消</van-button>
+    <van-button class="label-btn" type="primary" bind:click="onConfirmClick">提交</van-button>
+  </view>
+
+</view>

@@ -1,0 +1,150 @@
+page {
+  background-color: rgb(241, 238, 238);
+}
+
+.box {
+  display: flex;
+  /* margin-top: 50rpx; */
+  width: 100vw;
+  height: 30vh;
+  background-color: #1989fadc;
+  border-radius: 0 0 7% 7%;
+}
+
+.box .inner {
+  width: 100%;
+  margin-top: 20rpx;
+  height: 180rpx;
+  line-height: 180rpx;
+  font-size: 60rpx;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.inner1 {
+  border-radius: 20rpx 0 0 20rpx;
+}
+
+.inner2 {
+  border-radius: 0 20rpx 20rpx 0;
+}
+
+
+.box .inner:first-child {
+  background-color: #1989fadc;
+  color: antiquewhite;
+  transform-origin: right;
+  transform: perspective(200rpx) rotateY(-10deg);
+}
+
+.box .inner:last-child {
+  background-color: #1989fadc;
+  color: antiquewhite;
+  transform-origin: left;
+  transform: perspective(200rpx) rotateY(10deg);
+}
+
+.logo-text {
+  position: absolute;
+  animation: marquee 5s linear infinite;
+}
+
+.box .inner:first-child view {
+  animation-delay: 2.5s;
+  left: -100%;
+}
+
+@keyframes marquee {
+  from {
+    left: 100%;
+  }
+
+  to {
+    left: -100%;
+  }
+}
+
+.home-card {
+  height: 15vh;
+  width: 90%;
+  margin-top: -10vh;
+  margin-left: 5%;
+  background-color: #fff;
+  border-radius: 25rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.home-cardText {
+  font-weight: 600;
+  font-size: 28rpx;
+  margin-top: 10rpx;
+}
+
+.home-upload,
+.home-help {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-cardIcon {
+  font-size: 100rpx;
+}
+
+.home-main {
+  background-color: #fff;
+  height: 57vh;
+  width: 90vw;
+  margin-top: 3vh;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  border-radius: 25rpx;
+  position: relative;
+}
+
+.upload-wrapper {
+  padding-top: 30rpx;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+}
+
+.upload-desc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50rpx;
+}
+
+.upload-desc .van-dropdown-menu {
+  height: 50rpx;
+  width: 300rpx;
+  box-shadow: var(--dropdown-menu-box-shadow, 2px 0 0 0 hsla(210, 1%, 40%, .12));
+}
+
+.upload-desc .van-dropdown-item {
+  width: 90vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+
+.upload-container {
+  margin-top: 30rpx;
+}
+
+
+.home-btn {
+  border-radius: 0 0 25rpx 25rpx;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-right: 5vw;
+  /* margin-left: -5vw; */
+}
+
+.home-btn button {
+  border-radius: 0 0 25rpx 25rpx;
+}

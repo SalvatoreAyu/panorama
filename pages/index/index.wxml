@@ -1,0 +1,28 @@
+<!-- index.wxml -->
+<view class="container" style="width:{{ScreenTotalW}}rpx;height:{{ContainerH}}rpx">
+
+  <view class="wrapper" style="width:{{ScreenTotalW}}rpx;height:{{ScreenTotalH}}rpx;">
+    <canvas type="webgl" id="c" style="width: 100%; height: 100%;" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchCancel" bindlongpress="longPress" bindtap="tap" canvas-id="canvasIndex">
+    </canvas>
+    <!-- <cover-view style="width:{{ScreenTotalW}}rpx;height:{{ScreenTotalH}}rpx;" class="label-container" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchCancel" bindlongpress="longPress" bindtap="tap"> -->
+    <cover-view wx:for="{{labelArray}}" wx:key="id" class="label-item {{item.label}}" id="{{item.id}}" style="position: absolute;text-align:center;z-index: 999999;display: {{item.display}};left:{{item.left}};top:{{item.top}}">
+      {{item.label}}
+    </cover-view>
+    <!-- </cover-view> -->
+    <cover-view class="pop-up" wx:if="{{!modelHidden}}">
+      <cover-view class="pop-container">
+        <cover-view class="tip-title">是否在此处新建标注?</cover-view>
+        <cover-view class="pop-btn">
+          <cover-view class="pop-cancel" bindtap="onPopCancel">取消</cover-view>
+          <cover-view class="pop-confirm" bindtap="onPopConfirm">确认</cover-view>
+        </cover-view>
+      </cover-view>
+    </cover-view>
+  </view>
+  <van-tabbar style="width:{{ScreenTotalW}}rpx;height:{{TabBarH}}rpx;" active="{{active}}" border="{{false}}" bind:change="onTabChange">
+    <van-tabbar-item icon="replay" bind:click="onAutoPlayClick">自动旋转</van-tabbar-item>
+    <van-tabbar-item icon="eye-o" bind:click="onFullScreenClick">全屏查看</van-tabbar-item>
+    <van-tabbar-item icon="guide-o" bind:click="onSummaryClick">标签查看</van-tabbar-item>
+    <van-tabbar-item icon="wap-home-o">场景切换</van-tabbar-item>
+  </van-tabbar>
+</view>

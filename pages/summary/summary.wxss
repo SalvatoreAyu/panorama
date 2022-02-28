@@ -1,0 +1,9 @@
+/* pages/summary/summary.js.wxss */
+
+.van-card {
+  border: 1rpx solid #ebedf02a;
+  margin-bottom: 30rpx;
+  border-radius: 20rpx;
+  background-color: #ebedf0;
+  box-shadow: 0 8px 12px #ebedf0
+}

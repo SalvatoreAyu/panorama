@@ -1,0 +1,45 @@
+<view>
+  <view class="box logo-container">
+    <view class="inner inner1">
+      <view class="logo-text">360° 全景图</view>
+    </view>
+    <view class="inner inner2">
+      <view class="logo-text">360° 全景图</view>
+    </view>
+  </view>
+  <view class="home-card">
+    <view class="home-upload">
+      <van-icon class="home-cardIcon" name="add" color="#1989fadc" />
+      <view class="home-cardText">全景浏览</view>
+    </view>
+    <view class="home-help">
+      <van-icon class="home-cardIcon" name="question" color="#1989fadc" />
+      <view class="home-cardText">使用须知</view>
+    </view>
+  </view>
+  <view class="home-main">
+    <view class="upload-wrapper">
+      <view class="upload-desc">
+        <text>上传方式</text>
+        <slot>ss</slot>
+        <van-dropdown-menu active-color="#1989fa">
+          <van-dropdown-item bind:change="onDropdownItemChange" value="{{ dropdownValue }}" options="{{ dropdownOption }}" />
+        </van-dropdown-menu>
+      </view>
+
+      <view class="upload-container">
+        <van-uploader wx:if="{{dropdownValue==0}}" bind:delete="imgDelete" file-list="{{ fileList }}" max-count="6" bind:after-read="afterRead" />
+        <view wx:elif="{{dropdownValue==1}}">
+          <van-field style=" font-size: 30rpx;" label="ID" clearable="true" type="textarea" autosize value="{{ cloudId }}" placeholder="请输入云端Id,分号隔开" bind:change="onCloudIdChange" />
+        </view>
+        <view wx:else>
+          <van-field style=" font-size: 30rpx;" label="链接" clearable="true" type="textarea" autosize value="{{ imgSrc }}" placeholder="请输入图片url链接,分号隔开" bind:change="onImgSrcChange" />
+        </view>
+      </view>
+      <view>
+        <van-button type="info" class="home-btn" block bind:click="onGoBtnClick">立即体验</van-button>
+      </view>
+    </view>
+    <view class="help-wrapper"></view>
+  </view>
+</view>
