@@ -8,17 +8,21 @@
     </view>
   </view>
   <view class="home-card">
-    <view class="home-upload">
+    <view class="home-upload" bindtap="onPlayClick">
       <van-icon class="home-cardIcon" name="add" color="#1989fadc" />
       <view class="home-cardText">全景浏览</view>
     </view>
-    <view class="home-help">
+    <view class="home-help" bindtap="onHelpClick">
       <van-icon class="home-cardIcon" name="question" color="#1989fadc" />
       <view class="home-cardText">使用须知</view>
     </view>
   </view>
   <view class="home-main">
-    <view class="upload-wrapper">
+    <view wx:if="{{showPlay}}" class="upload-wrapper">
+      <view class="upload-desc">
+        <text>全景名称</text>
+        <van-field value="{{ panoramaName }}" placeholder="请输入名称" border="{{ false }}" bind:change="onPanoramaNameChange" />
+      </view>
       <view class="upload-desc">
         <text>上传方式</text>
         <slot>ss</slot>
@@ -26,11 +30,13 @@
           <van-dropdown-item bind:change="onDropdownItemChange" value="{{ dropdownValue }}" options="{{ dropdownOption }}" />
         </van-dropdown-menu>
       </view>
-
       <view class="upload-container">
-        <van-uploader wx:if="{{dropdownValue==0}}" bind:delete="imgDelete" file-list="{{ fileList }}" max-count="6" bind:after-read="afterRead" />
+        <view wx:if="{{dropdownValue==0}}">
+          <van-steps steps="{{ steps }}" active="{{ active }}" active-color="#38f" active-icon="circle" />
+          <van-uploader bind:delete="imgDelete" file-list="{{ fileList }}" max-count="6" bind:after-read="afterRead" />
+        </view>
         <view wx:elif="{{dropdownValue==1}}">
-          <van-field style=" font-size: 30rpx;" label="ID" clearable="true" type="textarea" autosize value="{{ cloudId }}" placeholder="请输入云端Id,分号隔开" bind:change="onCloudIdChange" />
+          <van-field style=" font-size: 30rpx;" label="ID" maxlength="100" clearable="true" type="textarea" autosize value="{{ cloudId }}" placeholder="请输入云端Id,分号隔开" bind:change="onCloudIdChange" />
         </view>
         <view wx:else>
           <van-field style=" font-size: 30rpx;" label="链接" clearable="true" type="textarea" autosize value="{{ imgSrc }}" placeholder="请输入图片url链接,分号隔开" bind:change="onImgSrcChange" />
@@ -40,6 +46,15 @@
         <van-button type="info" class="home-btn" block bind:click="onGoBtnClick">立即体验</van-button>
       </view>
     </view>
-    <view class="help-wrapper"></view>
+    <view wx:else class="help-wrapper">
+      <view>
+        <van-notice-bar scrollable color="#1989fa" background="#ecf9ff" text="这是一款360°在线全景图浏览小程序。" />
+        <van-notice-bar wrapable color="#1989fa" background="#ecf9ff" text="你需要做的仅仅是第一次访问时按照下方步骤条上传您的全景图片。" />
+        <van-steps steps="{{ steps }}" active="6" active-color="#38f" active-icon="circle" />
+        <van-steps steps="{{ helpSteps }}" active="6" active-color="#38f" active-icon="circle" />
+        <view style="font-size:  20rpx;font-weight: 100;color: gray;position: absolute;right:0;bottom: 30rpx;">https://github.com/SalvatoreAyu/panorama</view>
+        <view style="font-size: 20rpx;font-weight: 100;color: gray;position: absolute;right:0;bottom: 0;">designed by Jiangao</view>
+      </view>
+    </view>
   </view>
 </view>

@@ -18,11 +18,19 @@
         </cover-view>
       </cover-view>
     </cover-view>
+    <cover-view class="pop-up" wx:if="{{!modelUploadHidden}}">
+      <cover-view class="pop-container">
+        <cover-view class="tip-title">{{uploadMessage}}</cover-view>
+        <cover-view class="pop-btn">
+          <button disabled="{{!fileId}}" class="pop-complete" bindtap="onUploadCloudComplete">一键复制云Id</button>
+        </cover-view>
+      </cover-view>
+    </cover-view>
   </view>
   <van-tabbar style="width:{{ScreenTotalW}}rpx;height:{{TabBarH}}rpx;" active="{{active}}" border="{{false}}" bind:change="onTabChange">
     <van-tabbar-item icon="replay" bind:click="onAutoPlayClick">自动旋转</van-tabbar-item>
-    <van-tabbar-item icon="eye-o" bind:click="onFullScreenClick">全屏查看</van-tabbar-item>
     <van-tabbar-item icon="guide-o" bind:click="onSummaryClick">标签查看</van-tabbar-item>
-    <van-tabbar-item icon="wap-home-o">场景切换</van-tabbar-item>
+    <van-tabbar-item icon="upgrade" bind:click="onUploadClick">上传到云</van-tabbar-item>
+    <van-tabbar-item icon="wap-home-o" bind:click="onScreenClick">场景切换</van-tabbar-item>
   </van-tabbar>
 </view>

@@ -31,9 +31,12 @@ Page({
     TabBarH: SCREEN_WIDTH * RATE - SCREEN_WIDTH * RATE * 0.8,
     srcList: [],
     active: 0,
+    fileId: '',
     arrayShow: false,
     overlayShow: false,
     modelHidden: true,
+    modelUploadHidden: true,
+    uploadMessage: "正在上传中，请耐心等待",
     labelArray: [{
       id: 'label0',
       num: 0,
@@ -90,9 +93,7 @@ Page({
 
         // right left top bottom front back 
         // let sides = ['../../assets/room/r.jpg', '../../assets/room/l.jpg', '../../assets/room/u.jpg', '../../assets/room/d.jpg', '../../assets/room/f.jpg', '../../assets/room/b.jpg']
-        console.log(this.data.srcList);
-        let sides = type == 1 ? this.data.srcList : this.data.srcList.map(item => item.url)
-        console.log(sides);
+        let sides = this.data.srcList
         let materials = [];
         for (let i = 0; i < sides.length; i++) {
           let side = sides[i];
@@ -341,7 +342,62 @@ Page({
     })
   },
 
+  onUploadClick() {
+    let pathName = wx.getStorageSync('panoramaName')
+    this.setData({
+      modelUploadHidden: false
+    })
+    this.data.srcList.map((item, index) =>
+      this.uploadFilePromise(pathName, item, index)
+    )
+  },
+  uploadFilePromise(pathName, url, index) {
+    let type = ['r', 'l', 'u', 'd', 'f', 'b']
+    wx.cloud.uploadFile({
+      cloudPath: pathName + '/' + type[index] + '.jpg',
+      filePath: url,
+      success: res => {
+        console.log(res);
+        this.setData({
+          fileId: res.fileID,
+          uploadMessage: '上传成功，你的云id为' + this.data.fileId
+        })
+      }
+    });
+    // Dialog.alert({
+    //   title: '上传到云',
+    //   message: this.data.fileId ? '上传成功' + this.data.fileId : "loading",
+    // }).then(() => {
+    //   wx.setClipboardData({
+    //     data: this.data.fileId,
+    //     success(res) {
+    //       wx.getClipboardData({
+    //         success(res) {
+    //           console.log(res.data) // data
+    //         }
+    //       })
+    //     }
+    //   })
+    // });
+  },
+  onUploadCloudComplete() {
+    wx.setClipboardData({
+      data: this.data.fileId,
+      success(res) {
+        wx.getClipboardData({
+          success(res) {
+            console.log(res.data) // data
+          }
+        })
+        this.setData({
+          modelUploadHidden: true
+        })
+      }
+    })
+  },
+  onScreenClick() {
 
+  },
   onPopCancel() {
     this.setData({
       modelHidden: true
