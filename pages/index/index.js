@@ -37,29 +37,40 @@ Page({
     modelHidden: true,
     modelUploadHidden: true,
     uploadMessage: "正在上传中，请耐心等待",
-    labelArray: [{
-      id: 'label0',
-      num: 0,
-      label: 'fuck',
-      display: 'block',
-      left: '30px',
-      top: '52px'
-    }],
+    rightPopShow: false,
+    labelArray: [
+      //   {
+      //   id: 'label0',
+      //   num: 0,
+      //   label: 'fuck',
+      //   display: 'block',
+      //   left: '30px',
+      //   top: '52px'
+      // }
+    ],
     tabBarShow: false,
-    tags: []
+    tags: [],
+    panoramaNum: 0,
+    curIndex: 0,
+    totalArr: []
   },
   documentTouchMove: function () {},
   documentTouchEnd: function () {},
   onLoad: function (options) {
+    // let srcList = JSON.parse(wx.getStorageSync('panoramaArr'))
     let srcList = JSON.parse(decodeURIComponent(options.srcList))
-    let type = JSON.parse(decodeURIComponent(options.type))
+    // this.setData({
+    //   totalArr: srcList
+    // })
+    let num = JSON.parse(wx.getStorageSync('panoramaNum'))
+    console.log(num);
     this.setData({
-      srcList: srcList
+      // srcList: this.data.totalArr[this.data.curIndex],
+      srcList: srcList,
+      panoramaNum: num
     })
     console.log(srcList);
     wx.cloud.init()
-
-
     wx.createSelectorQuery()
       .select('#c')
       .node()
@@ -94,6 +105,7 @@ Page({
         // right left top bottom front back 
         // let sides = ['../../assets/room/r.jpg', '../../assets/room/l.jpg', '../../assets/room/u.jpg', '../../assets/room/d.jpg', '../../assets/room/f.jpg', '../../assets/room/b.jpg']
         let sides = this.data.srcList
+        console.log("XXXX", sides);
         let materials = [];
         for (let i = 0; i < sides.length; i++) {
           let side = sides[i];
@@ -347,11 +359,12 @@ Page({
     this.setData({
       modelUploadHidden: false
     })
-    this.data.srcList.map((item, index) =>
-      this.uploadFilePromise(pathName, item, index)
-    )
+    // this.data.srcList.map((item, index) =>
+    //   this.uploadFilePromise(pathName, item, index)
+    // )
   },
   uploadFilePromise(pathName, url, index) {
+    console.log("xx", pathName, url);
     let type = ['r', 'l', 'u', 'd', 'f', 'b']
     wx.cloud.uploadFile({
       cloudPath: pathName + '/' + type[index] + '.jpg',
@@ -362,6 +375,9 @@ Page({
           fileId: res.fileID,
           uploadMessage: '上传成功，你的云id为' + this.data.fileId
         })
+      },
+      fail: err => {
+        console.log(err);
       }
     });
     // Dialog.alert({
@@ -396,7 +412,30 @@ Page({
     })
   },
   onScreenClick() {
-
+    this.setData({
+      rightPopShow: true
+    })
+    // this.setData({
+    //   curIndex: 1,
+    //   srcList: this.data.totalArr[1]
+    // })
+  },
+  onPopClose() {
+    this.setData({
+      rightPopShow: false
+    })
+  },
+  onSceneChange(e) {
+    console.log(e);
+    // this.setData({
+    //   curIndex: e.detail,
+    //   srcList: this.data.totalArr[e.detail]
+    // })
+    let total = JSON.parse(wx.getStorageSync('panoramaArr'))
+    // this.onLoad()
+    wx.redirectTo({
+      url: '../../pages/index/index?srcList=' + encodeURIComponent(JSON.stringify(total[e.detail]))
+    })
   },
   onPopCancel() {
     this.setData({

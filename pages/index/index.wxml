@@ -33,4 +33,10 @@
     <van-tabbar-item icon="upgrade" bind:click="onUploadClick">上传到云</van-tabbar-item>
     <van-tabbar-item icon="wap-home-o" bind:click="onScreenClick">场景切换</van-tabbar-item>
   </van-tabbar>
+
 </view>
+<van-popup show="{{ rightPopShow }}" custom-style="height: 100%; width:30%" position="right" bind:close="onPopClose">
+  <van-sidebar active-key="{{ curIndex }}" bind:change="onSceneChange">
+    <van-sidebar-item wx:for="{{panoramaNum}}" wx:key="sc" title="场景{{index}}" />
+  </van-sidebar>
+</van-popup>

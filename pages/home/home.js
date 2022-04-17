@@ -12,6 +12,10 @@ Page({
     dropdownValue: 0,
     active: 0,
     panoramaName: "",
+    sceneNum: 1,
+    activeName: 0,
+    resArr: [],
+    showGoBtn: false,
     // right left top bottom front back
     helpSteps: [{
         desc: '上传图片'
@@ -60,9 +64,19 @@ Page({
     ],
     srcList: []
   },
+  onSceneNumChange(e) {
+    this.setData({
+      sceneNum: e.detail
+    })
+  },
   onLoad() {
     wx.clearStorageSync()
     wx.cloud.init()
+  },
+  onSceneChange(e) {
+    this.setData({
+      activeName: e.detail
+    })
   },
   onDescChange(event) {
     this.setData({
@@ -176,8 +190,10 @@ Page({
   },
   parseImgSrc(src) {
     let tempArr = ['r', 'l', 'u', 'd', 'f', 'b']
-    let list = new Array(6).fill('').map((item, i) => src.replace(/([\s\S]*)(\w)\.(jpg|png|jpeg|JPEG|JPG|PNG)$/g, (...arg) =>
-      arg[1] + tempArr[i] + '.' + arg[3]
+    let list = new Array(6).fill('').map((item, i) => src.replace(/([\s\S]*)(\w)\.(jpg|png|jpeg|JPEG|JPG|PNG)$/g, (...arg) => {
+        return arg[1] + tempArr[i] + '.' + arg[3]
+      }
+
     ))
     return list
   },
@@ -188,7 +204,6 @@ Page({
         // fileList: [this.data.cloudId],
         success: res => {
           let arr = res.fileList.map(item => item.tempFileURL)
-          console.log(arr);
           reslove(arr)
         },
         fail: err => {
@@ -200,10 +215,8 @@ Page({
   async fetchCloud() {
     // await this.getCloudImgSrc()
   },
-  async onGoBtnClick() {
-    if (!this.data.panoramaName) {
-      // todo..
-    }
+  async onSaveBtnClick() {
+
     if (this.data.dropdownValue == 1) {
       let p = await this.getCloudImgSrc()
       console.log(p);
@@ -226,15 +239,41 @@ Page({
       default:
         break;
     }
-    console.log(srcL);
-    // this.setData({
-    //   srcList: srcL
-    // })
-
-    console.log('fuck');
+    console.log("shit", srcL);
+    this.data.resArr.push(srcL)
+    // Notify({
+    //   type: 'success',
+    //   message: '保存成功'
+    // });
+    let c = this.data.activeName
+    if (c < this.data.sceneNum - 1) {
+      this.setData({
+        activeName: c + 1,
+        cloudId: '',
+        imgSrc: '',
+        fileList: [],
+        dropdownValue: 0
+      })
+    } else {
+      this.setData({
+        activeName: c + 1,
+        showGoBtn: true,
+        cloudId: '',
+        imgSrc: '',
+        fileList: [],
+      })
+    }
+    this.setData({})
+  },
+  async onGoBtnClick() {
+    if (!this.data.panoramaName) {
+      // todo..
+    }
     wx.setStorageSync('panoramaName', this.data.panoramaName)
+    wx.setStorageSync('panoramaNum', this.data.sceneNum)
+    wx.setStorageSync('panoramaArr', JSON.stringify(this.data.resArr))
     wx.navigateTo({
-      url: '../../pages/index/index?srcList=' + encodeURIComponent(JSON.stringify(srcL)) + '&type=' + this.data.dropdownValue,
+      url: '../../pages/index/index?srcList=' + encodeURIComponent(JSON.stringify(this.data.resArr[0]))
     })
   },
 })

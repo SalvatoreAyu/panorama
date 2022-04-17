@@ -20,30 +20,44 @@
   <view class="home-main">
     <view wx:if="{{showPlay}}" class="upload-wrapper">
       <view class="upload-desc">
-        <text>全景名称</text>
-        <van-field value="{{ panoramaName }}" placeholder="请输入名称" border="{{ false }}" bind:change="onPanoramaNameChange" />
+        <van-field label="全景名称" value="{{ panoramaName }}" placeholder="请输入名称" border="{{ false }}" bind:change="onPanoramaNameChange" />
       </view>
-      <view class="upload-desc">
-        <text>上传方式</text>
-        <slot>ss</slot>
-        <van-dropdown-menu active-color="#1989fa">
-          <van-dropdown-item bind:change="onDropdownItemChange" value="{{ dropdownValue }}" options="{{ dropdownOption }}" />
-        </van-dropdown-menu>
+      <view class="upload-desc" style="display: flex;margin-top: 15rpx;">
+        <text style="color:#646566;padding:16px;font-size: 14px;">场景数量</text>
+        <van-stepper value="{{ sceneNum }}" bind:change="onSceneNumChange" min="1" max="5" />
       </view>
-      <view class="upload-container">
-        <view wx:if="{{dropdownValue==0}}">
-          <van-steps steps="{{ steps }}" active="{{ active }}" active-color="#38f" active-icon="circle" />
-          <van-uploader bind:delete="imgDelete" file-list="{{ fileList }}" max-count="6" bind:after-read="afterRead" />
-        </view>
-        <view wx:elif="{{dropdownValue==1}}">
-          <van-field style=" font-size: 30rpx;" label="ID" maxlength="100" clearable="true" type="textarea" autosize value="{{ cloudId }}" placeholder="请输入云端Id,分号隔开" bind:change="onCloudIdChange" />
-        </view>
-        <view wx:else>
-          <van-field style=" font-size: 30rpx;" label="链接" clearable="true" type="textarea" autosize value="{{ imgSrc }}" placeholder="请输入图片url链接,分号隔开" bind:change="onImgSrcChange" />
-        </view>
-      </view>
+
+      <van-collapse accordion value="{{ activeName }}" bind:change="onSceneChange">
+        <scroll-view scroll-y="true" style="height:45vh">
+          <van-collapse-item wx:for="{{sceneNum}}" title="场景{{index+1}}" wx:key="scene">
+            <view scroll-y="true" class="upload-desc">
+              <text>上传方式</text>
+              <van-dropdown-menu title="上传方式" active-color="#1989fa">
+                <van-dropdown-item bind:change="onDropdownItemChange" value="{{ dropdownValue }}" options="{{ dropdownOption }}" />
+              </van-dropdown-menu>
+            </view>
+            <view class="upload-container">
+              <view wx:if="{{dropdownValue==0}}">
+                <!-- <van-steps steps="{{ steps }}" active="{{ active }}" active-color="#38f" active-icon="circle" /> -->
+                <van-uploader bind:delete="imgDelete" file-list="{{ fileList }}" max-count="6" bind:after-read="afterRead" />
+              </view>
+              <view wx:elif="{{dropdownValue==1}}">
+                <van-field style=" font-size: 30rpx;" label="ID" maxlength="100" clearable="true" type="textarea" autosize value="{{ cloudId }}" placeholder="请输入云端Id,分号隔开" bind:change="onCloudIdChange" />
+              </view>
+              <view wx:else>
+                <van-field style=" font-size: 30rpx;" label="链接" clearable="true" type="textarea" autosize value="{{ imgSrc }}" placeholder="请输入图片url链接,分号隔开" bind:change="onImgSrcChange" />
+              </view>
+              <!-- <view style="display:flex;justify-content: space-between;">
+                <van-button round block plain type="info" bind:click="onResetBtnClick">重置</van-button> -->
+              <van-button round block plain type="info" bind:click="onSaveBtnClick">保存</van-button>
+              <!-- </view> -->
+
+            </view>
+          </van-collapse-item>
+        </scroll-view>
+      </van-collapse>
       <view>
-        <van-button type="info" class="home-btn" block bind:click="onGoBtnClick">立即体验</van-button>
+        <van-button wx:if="{{showGoBtn}}" type="info" class="home-btn" block bind:click="onGoBtnClick" style="margin-top: 30rpx;">立即体验</van-button>
       </view>
     </view>
     <view wx:else class="help-wrapper">

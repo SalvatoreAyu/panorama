@@ -49,9 +49,14 @@
   margin-top: 60rpx;
   /* margin-left: 57rpx; */
   height: 70%;
+  width: 100%;
   color: #272727ab;
   font-size: 32rpx;
+  display: block;
   z-index: 999999;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .pop-btn {
@@ -98,4 +103,10 @@
   font-size: 30rpx;
   color: #fff;
   font-weight: 100;
+}
+
+.scene-item {
+  display: flex;
+  height: 60rpx;
+  justify-content: center;
 }
