@@ -1,6 +1,5 @@
 import {
     EventDispatcher,
-    MOUSE,
     Quaternion,
     Spherical,
     TOUCH,
@@ -22,66 +21,63 @@ let OrbitControls = function (object, domElement) {
     };
     this.object = object;
     this.domElement = (domElement !== undefined) ? domElement : document;
-    // Set to false to disable this control
+    // 默认开启轨道控制器
     this.enabled = true;
-    // "target" sets the location of focus, where the object orbits around
-    // 此处即是相机的lookAt
+    // 设置相机的lookAt
     this.target = new Vector3();
-    // How far you can dolly in and out ( PerspectiveCamera only )
+    // 相机向内/外移动距离
     this.minDistance = 0;
     this.maxDistance = Infinity;
-    // How far you can orbit vertically, upper and lower limits.
-    // Range is 0 to Math.PI radians.
+    // 垂直旋转的上下限
     this.minPolarAngle = 0; // radians
     this.maxPolarAngle = Math.PI; // radians
-    // How far you can orbit horizontally, upper and lower limits.
-    // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
+    // 水平选装的上下限
     this.minAzimuthAngle = -Infinity; // radians
     this.maxAzimuthAngle = Infinity; // radians
 
-    // Set to false to disable rotating
+    // 默认启用选装
     this.enableRotate = true;
+    // 旋转速度
     this.rotateSpeed = 1.0;
-    // Set to true to automatically rotate around the target
-    // If auto-rotate is enabled, you must call controls.update() in your animation loop
+    // 自动旋转
     this.autoRotate = false;
-    this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
+    this.autoRotateSpeed = 2.0; 
 
 
 
     // Touch fingers
     this.touches = {
         ONE: TOUCH.ROTATE,
-        TWO: TOUCH.DOLLY_PAN
     };
     // for reset
-    this.target0 = this.target.clone();
-    this.position0 = this.object.position.clone();
-    this.zoom0 = this.object.zoom;
-    //
-    // public methods
-    //
+    // this.target0 = this.target.clone();
+    // this.position0 = this.object.position.clone();
+    // this.zoom0 = this.object.zoom;
+   
+    // 获取当前垂直旋转
     this.getPolarAngle = function () {
         return spherical.phi;
     };
+    // 获取当前水平选装
     this.getAzimuthalAngle = function () {
         return spherical.theta;
     };
-    this.saveState = function () {
-        scope.target0.copy(scope.target);
-        scope.position0.copy(scope.object.position);
-        scope.zoom0 = scope.object.zoom;
-    };
-    this.reset = function () {
-        scope.target.copy(scope.target0);
-        scope.object.position.copy(scope.position0);
-        scope.object.zoom = scope.zoom0;
-        scope.object.updateProjectionMatrix();
-        scope.dispatchEvent(changeEvent);
-        scope.update();
-        state = STATE.NONE;
-    };
-    // this method is exposed, but perhaps it would be better if we can make it private...
+    // this.saveState = function () {
+    //     scope.target0.copy(scope.target);
+    //     scope.position0.copy(scope.object.position);
+    //     scope.zoom0 = scope.object.zoom;
+    // };
+    // this.reset = function () {
+    //     scope.target.copy(scope.target0);
+    //     scope.object.position.copy(scope.position0);
+    //     scope.object.zoom = scope.zoom0;
+    //     scope.object.updateProjectionMatrix();
+    //     scope.dispatchEvent(changeEvent);
+    //     scope.update();
+    //     state = STATE.NONE;
+    // };
+
+
     this.update = function () {
         let offset = new Vector3();
         // so camera.up is the orbit axis
@@ -90,18 +86,23 @@ let OrbitControls = function (object, domElement) {
         let quat = new Quaternion()
             .setFromUnitVectors(object.up, new Vector3(0, 1, 0));
         let quatInverse = quat.clone()
-            .inverse();
+            .inverse(); // 共轭四元数
         let lastPosition = new Vector3();
         let lastQuaternion = new Quaternion();
         return function update() {
             let position = scope.object.position;  //尚未变化的position，也即是相机位置
             offset.copy(position)
-                .sub(scope.target);;// 形成一个从target=>position的向量
+                .sub(scope.target);
+                // sub 向量的减法 u-v 形成 v=>u的向量
+                // 形成一个从target=>position的向量
 
             // rotate offset to "y-axis-is-up" space
+            // 将四元数变化应用到该向量
             offset.applyQuaternion(quat);
+
             // angle from z-axis around y-axis
-            spherical.setFromVector3(offset); //相机位置转化为球面坐标
+             // 将三维向量转化为球面坐标
+            spherical.setFromVector3(offset);
 
             if (scope.autoRotate && state === STATE.NONE) {
                 rotateLeft(getAutoRotationAngle());
@@ -126,7 +127,6 @@ let OrbitControls = function (object, domElement) {
             spherical.radius = Math.max(scope.minDistance, Math.min(scope.maxDistance, spherical.radius));
             // move target to panned location
 
-            scope.target.add(panOffset);
 
             offset.setFromSpherical(spherical); // 球坐标转化为向量
             // rotate offset back to "camera-up-vector-is-up" space
@@ -136,19 +136,16 @@ let OrbitControls = function (object, domElement) {
             scope.object.lookAt(scope.target); //焦点不变
 
             sphericalDelta.set(0, 0, 0);
-            panOffset.set(0, 0, 0);
+            // panOffset.set(0, 0, 0);
 
             scale = 1;
-            // update condition is:
             // min(camera displacement, camera rotation in radians)^2 > EPS
             // using small-angle approximation cos(x/2) = 1 - x^2 / 8
-            if (zoomChanged ||
-                lastPosition.distanceToSquared(scope.object.position) > EPS ||
+            if (lastPosition.distanceToSquared(scope.object.position) > EPS ||
                 8 * (1 - lastQuaternion.dot(scope.object.quaternion)) > EPS) {
                 scope.dispatchEvent(changeEvent);
                 lastPosition.copy(scope.object.position);
                 lastQuaternion.copy(scope.object.quaternion);
-                zoomChanged = false;
                 return true;
             }
             return false;
@@ -179,8 +176,7 @@ let OrbitControls = function (object, domElement) {
     let spherical = new Spherical();
     let sphericalDelta = new Spherical();
     let scale = 1;
-    let panOffset = new Vector3();
-    let zoomChanged = false;
+    // let panOffset = new Vector3();
     let rotateStart = new Vector2();
     let rotateEnd = new Vector2();
     let rotateDelta = new Vector2();
@@ -188,22 +184,21 @@ let OrbitControls = function (object, domElement) {
     function getAutoRotationAngle() {
         return 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
     }
-
+    // 水平旋转
     function rotateLeft(angle) {
         sphericalDelta.theta -= angle;
     }
 
+    // 垂直旋转
     function rotateUp(angle) {
         sphericalDelta.phi -= angle;
     }
-    //
-    // event callbacks - update the object state
-    //
-
+    
     function handleTouchStartRotate(event) {
         if (event.touches.length == 1) {
             rotateStart.set(event.touches[0].pageX, event.touches[0].pageY);
-        } else {
+        }
+         else {
             let x = 0.5 * (event.touches[0].pageX + event.touches[1].pageX);
             let y = 0.5 * (event.touches[0].pageY + event.touches[1].pageY);
             rotateStart.set(x, y);
@@ -221,11 +216,14 @@ let OrbitControls = function (object, domElement) {
         rotateDelta.subVectors(rotateEnd, rotateStart)
             .multiplyScalar(scope.rotateSpeed);
         let element = scope.domElement === document ? scope.domElement.body : scope.domElement;
-        rotateLeft(2 * Math.PI * rotateDelta.x / element.clientHeight); // yes, height
+        rotateLeft(2 * Math.PI * rotateDelta.x / element.clientHeight); 
         rotateUp(2 * Math.PI * rotateDelta.y / element.clientHeight);
         rotateStart.copy(rotateEnd);
     }
 
+    function handleGyroscope (e) {
+        console.log("xxx",e);
+    }
     function handleTouchEnd( /*event*/) {
         // no-op
     }
@@ -274,7 +272,6 @@ let OrbitControls = function (object, domElement) {
         scope.dispatchEvent(endEvent);
         state = STATE.NONE;
     }
-    //
     scope.domElement.addEventListener('touchstart', onTouchStart, false);
     scope.domElement.addEventListener('touchend', onTouchEnd, false);
     scope.domElement.addEventListener('touchmove', onTouchMove, false);

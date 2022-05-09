@@ -155,3 +155,23 @@ page {
 .home-btn button {
   border-radius: 0 0 25rpx 25rpx;
 }
+
+.up-image {
+  width: 180rpx;
+  height: 180rpx;
+  margin-right: 4rpx;
+  position: relative;
+}
+
+.up-delete {
+  position: absolute;
+  top: 0;
+  left: 152rpx;
+  font-size: 28rpx;
+  line-height: 20rpx;
+  width: 28rpx;
+  height: 28rpx;
+  color: #fff;
+  background-color: black;
+  border-radius: 0 0 0 28rpx;
+}

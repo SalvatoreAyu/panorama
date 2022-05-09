@@ -1,10 +1,10 @@
 <view>
   <view class="box logo-container">
     <view class="inner inner1">
-      <view class="logo-text">360° 全景图</view>
+      <view class="logo-text">全景图漫游</view>
     </view>
     <view class="inner inner2">
-      <view class="logo-text">360° 全景图</view>
+      <view class="logo-text">全景图漫游</view>
     </view>
   </view>
   <view class="home-card">
@@ -39,7 +39,18 @@
             <view class="upload-container">
               <view wx:if="{{dropdownValue==0}}">
                 <!-- <van-steps steps="{{ steps }}" active="{{ active }}" active-color="#38f" active-icon="circle" /> -->
-                <van-uploader bind:delete="imgDelete" file-list="{{ fileList }}" max-count="6" bind:after-read="afterRead" />
+                <!-- <van-uploader bind:delete="imgDelete" file-list="{{ fileList }}" max-count="6" bind:after-read="afterRead" /> -->
+                <!-- <van-button icon="photo" type="primary">上传图片</van-button> -->
+                <view style="display: flex; justify-content: center;">
+                  <van-icon name="plus" style="color:#646566" />
+                  <view bindtap="chooseMedia" style="color:#646566">上传图片</view>
+                </view>
+                <view scroll-y="true" style="display: flex; flex-direction: row;flex-wrap: wrap;">
+                  <view wx:for="{{fileList}}" wx:key="img" style="position: relative;width: 185rpx;">
+                    <image class="up-image" src="{{item.url}}"></image>
+                    <view class="up-delete" bindtap="imgDelete" data-src="{{item.url}}">×</view>
+                  </view>
+                </view>
               </view>
               <view wx:elif="{{dropdownValue==1}}">
                 <van-field style=" font-size: 30rpx;" label="ID" maxlength="100" clearable="true" type="textarea" autosize value="{{ cloudId }}" placeholder="请输入云端Id,分号隔开" bind:change="onCloudIdChange" />

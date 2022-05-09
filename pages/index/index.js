@@ -58,18 +58,18 @@ Page({
   documentTouchEnd: function () {},
   onLoad: function (options) {
     // let srcList = JSON.parse(wx.getStorageSync('panoramaArr'))
-    let srcList = JSON.parse(decodeURIComponent(options.srcList))
+    // let srcList = JSON.parse(decodeURIComponent(options.srcList))
     // this.setData({
     //   totalArr: srcList
     // })
-    let num = JSON.parse(wx.getStorageSync('panoramaNum'))
-    console.log(num);
-    this.setData({
-      // srcList: this.data.totalArr[this.data.curIndex],
-      srcList: srcList,
-      panoramaNum: num
-    })
-    console.log(srcList);
+    // let num = JSON.parse(wx.getStorageSync('panoramaNum'))
+    // console.log(num);
+    // this.setData({
+    //   // srcList: this.data.totalArr[this.data.curIndex],
+    //   srcList: srcList,
+    //   panoramaNum: num
+    // })
+    // console.log(srcList);
     wx.cloud.init()
     wx.createSelectorQuery()
       .select('#c')
@@ -84,7 +84,8 @@ Page({
 
 
         const camera = new THREE.PerspectiveCamera(80, canvas.width / canvas.height, 1, 2000);
-
+        const cameraHelper = new THREE.CameraHelper(camera)
+   
         const scene = new THREE.Scene();
         const renderer = new THREE.WebGLRenderer({
           // 抗锯齿
@@ -98,13 +99,12 @@ Page({
         controls.enablePan = false
         controls.enableZoom = false
         controls.autoRotate = false
-        camera.position.set(-0.1, 2, -5);
+        camera.position.set(0, 10, 20);
         // camera.position.set(0, 0, 0);
 
-
         // right left top bottom front back 
-        // let sides = ['../../assets/room/r.jpg', '../../assets/room/l.jpg', '../../assets/room/u.jpg', '../../assets/room/d.jpg', '../../assets/room/f.jpg', '../../assets/room/b.jpg']
-        let sides = this.data.srcList
+        let sides = ['../../assets/room/r.jpg', '../../assets/room/l.jpg', '../../assets/room/u.jpg', '../../assets/room/d.jpg', '../../assets/room/f.jpg', '../../assets/room/b.jpg']
+        // let sides = this.data.srcList
         console.log("XXXX", sides);
         let materials = [];
         for (let i = 0; i < sides.length; i++) {
@@ -194,6 +194,7 @@ Page({
 
     THREE.global.touchEventHandlerFactory('canvas', 'touchmove')(e)
   },
+
   longPress(e) {
     console.log('fuck');
     let raycasterCubeMesh;

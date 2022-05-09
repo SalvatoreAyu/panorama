@@ -115,6 +115,28 @@ Page({
       panoramaName: e.detail
     })
   },
+
+  chooseMedia() {
+    wx.chooseMedia({
+      count: 6,
+      mediaType: ['image'],
+      sourceType: ['album'],
+      sizeType: ['original'],
+      success: (res) => {
+        console.log("rerer", res);
+        let temp = res.tempFiles.map(item => {
+          return {
+            url: item.tempFilePath
+          }
+        })
+        let temp1 = this.data.fileList
+        this.setData({
+          fileList: [...temp1, ...temp],
+          active: this.data.fileList.length + temp.length
+        })
+      }
+    })
+  },
   afterRead(event) {
     const {
       file
@@ -156,7 +178,8 @@ Page({
   },
   imgDelete(e) {
     // console.log(e.detail);
-    let arr = this.data.fileList.filter((item) => item.url != e.detail.file.url)
+    console.log(e);
+    let arr = this.data.fileList.filter((item) => item.url != e.currentTarget.dataset.src)
     // console.log('xxx');
     this.setData({
       fileList: arr,
