@@ -1,7 +1,7 @@
 {
-  "pages": [
-    "pages/home/home",
-    "pages/index/index",
+  "pages": [ "pages/home/home", "pages/index/index", 
+ 
+    
     "pages/summary/summary",
     "pages/label/label",
     "pages/elg/elg"

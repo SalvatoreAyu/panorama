@@ -60,7 +60,7 @@
               </view>
               <!-- <view style="display:flex;justify-content: space-between;">
                 <van-button round block plain type="info" bind:click="onResetBtnClick">重置</van-button> -->
-              <van-button round block plain type="info" bind:click="onSaveBtnClick">保存</van-button>
+              <van-button round block plain type="info"  data-indexes="{{index}}" bind:click="onSaveBtnClick">保存</van-button>
               <!-- </view> -->
 
             </view>
@@ -73,13 +73,17 @@
     </view>
     <view wx:else class="help-wrapper">
       <view>
-        <van-notice-bar scrollable color="#1989fa" background="#ecf9ff" text="这是一款360°在线全景图浏览小程序。" />
-        <van-notice-bar wrapable color="#1989fa" background="#ecf9ff" text="你需要做的仅仅是第一次访问时按照下方步骤条上传您的全景图片。" />
+        <!-- <van-notice-bar scrollable color="#1989fa" background="#ecf9ff" text="这是一款360°在线全景图浏览小程序。" /> -->
+        <text style="padding-left: 32rpx;color: gray;">图片获取方式：</text>
+        <van-notice-bar wrapable color="#1989fa" background="#ecf9ff" text="1.将拍摄or现有的全景图片正方体分割" />
+        <van-notice-bar wrapable color="#1989fa" background="#ecf9ff" text="2.(小白体验)从以下六个方位分别拍摄普通照片" />
         <van-steps steps="{{ steps }}" active="6" active-color="#38f" active-icon="circle" />
+        <text style="padding-left: 32rpx;color: gray;">整体流程：</text>
         <van-steps steps="{{ helpSteps }}" active="6" active-color="#38f" active-icon="circle" />
         <view style="font-size:  20rpx;font-weight: 100;color: gray;position: absolute;right:0;bottom: 30rpx;">https://github.com/SalvatoreAyu/panorama</view>
         <view style="font-size: 20rpx;font-weight: 100;color: gray;position: absolute;right:0;bottom: 0;">designed by Jiangao</view>
       </view>
     </view>
   </view>
+  <van-notify id="van-notify" />
 </view>

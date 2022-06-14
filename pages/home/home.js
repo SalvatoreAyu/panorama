@@ -1,4 +1,5 @@
 // pages/home/home.js
+import Notify from '@vant/weapp/notify/notify';
 let SCREEN_WIDTH = 750
 let RATE = wx.getSystemInfoSync().screenHeight / wx.getSystemInfoSync().screenWidth
 Page({
@@ -214,7 +215,7 @@ Page({
   parseImgSrc(src) {
     let tempArr = ['r', 'l', 'u', 'd', 'f', 'b']
     let list = new Array(6).fill('').map((item, i) => src.replace(/([\s\S]*)(\w)\.(jpg|png|jpeg|JPEG|JPG|PNG)$/g, (...arg) => {
-        return arg[1] + tempArr[i] + '.' + arg[3]
+        return 'cloud://salvatore-4gqbt9rvb5c73e7d.7361-salvatore-4gqbt9rvb5c73e7d-'+arg[1] + tempArr[i] + '.' + arg[3]
       }
 
     ))
@@ -238,14 +239,11 @@ Page({
   async fetchCloud() {
     // await this.getCloudImgSrc()
   },
-  async onSaveBtnClick() {
-
+  async onSaveBtnClick(e) {
+    let tempId = null 
     if (this.data.dropdownValue == 1) {
       let p = await this.getCloudImgSrc()
-      console.log(p);
-      this.setData({
-        cloudId: p
-      })
+      tempId = p
     }
     let srcL = []
     switch (this.data.dropdownValue) {
@@ -255,7 +253,7 @@ Page({
         console.log(srcL);
         break;
       case 1:
-        srcL = this.data.cloudId
+        srcL = tempId
         break
       case 2:
         srcL = this.data.imgSrc.split(';')
@@ -263,7 +261,9 @@ Page({
         break;
     }
     console.log("shit", srcL);
-    this.data.resArr.push(srcL)
+    console.log(e);
+    // this.data.resArr.push(srcL)
+    this.data.resArr.splice(e.currentTarget.dataset.indexes,1,srcL)
     // Notify({
     //   type: 'success',
     //   message: '保存成功'
@@ -291,12 +291,16 @@ Page({
   async onGoBtnClick() {
     if (!this.data.panoramaName) {
       // todo..
+      Notify({ type: 'danger', message: '全景名称不能为空' });
+    }else{
+      wx.setStorageSync('panoramaName', this.data.panoramaName)
+      wx.setStorageSync('panoramaNum', this.data.sceneNum)
+      wx.setStorageSync('panoramaArr', JSON.stringify(this.data.resArr))
+      console.log("嘿嘿",this.data.resArr);
+      wx.navigateTo({
+        url: '../../pages/index/index?srcList=' + encodeURIComponent(JSON.stringify(this.data.resArr[0]))
+      })
     }
-    wx.setStorageSync('panoramaName', this.data.panoramaName)
-    wx.setStorageSync('panoramaNum', this.data.sceneNum)
-    wx.setStorageSync('panoramaArr', JSON.stringify(this.data.resArr))
-    wx.navigateTo({
-      url: '../../pages/index/index?srcList=' + encodeURIComponent(JSON.stringify(this.data.resArr[0]))
-    })
+
   },
 })

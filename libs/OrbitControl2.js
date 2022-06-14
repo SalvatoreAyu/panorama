@@ -91,8 +91,7 @@ let OrbitControls = function (object, domElement) {
         let lastQuaternion = new Quaternion();
         return function update() {
             let position = scope.object.position;  //尚未变化的position，也即是相机位置
-            offset.copy(position)
-                .sub(scope.target);
+            offset.copy(position).sub(scope.target);
                 // sub 向量的减法 u-v 形成 v=>u的向量
                 // 形成一个从target=>position的向量
 
@@ -114,22 +113,17 @@ let OrbitControls = function (object, domElement) {
             spherical.phi += sphericalDelta.phi;
 
 
-            // restrict theta to be between desired limits
             spherical.theta = Math.max(scope.minAzimuthAngle, Math.min(scope.maxAzimuthAngle, spherical.theta));
-            // restrict phi to be between desired limits
             spherical.phi = Math.max(scope.minPolarAngle, Math.min(scope.maxPolarAngle, spherical.phi));
 
             // 控制球坐标系极坐标上下限，避免变换到phi的极点
             spherical.makeSafe();
 
             spherical.radius *= scale;
-            // restrict radius to be between desired limits
             spherical.radius = Math.max(scope.minDistance, Math.min(scope.maxDistance, spherical.radius));
-            // move target to panned location
 
 
             offset.setFromSpherical(spherical); // 球坐标转化为向量
-            // rotate offset back to "camera-up-vector-is-up" space
             offset.applyQuaternion(quatInverse);
             position.copy(scope.target)
                 .add(offset);

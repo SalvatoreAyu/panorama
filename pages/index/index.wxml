@@ -18,13 +18,17 @@
         </cover-view>
       </cover-view>
     </cover-view>
-    <cover-view class="pop-up" wx:if="{{!modelUploadHidden}}">
-      <cover-view class="pop-container">
-        <cover-view class="tip-title">{{uploadMessage}}</cover-view>
-        <cover-view class="pop-btn">
-          <button disabled="{{!fileId}}" class="pop-complete" bindtap="onUploadCloudComplete">一键复制云Id</button>
+    <cover-view class="pop-up" wx:if="{{!modelUploadHidden}}" >
+      <cover-view class="pop-container" >
+        <cover-view class="tip-title" style="text-align:center;">{{uploadMessage}}</cover-view>
+        <cover-view wx:if="{{fileId}}" class="pop-btn" style="width: 100%;">
+          <cover-view  class="pop-complete" bindtap="onUploadCloudComplete">一键复制云Id</cover-view >
+        </cover-view>
+        <cover-view class="pop-del" bindtap="hideModelUploadHidden">
+          X
         </cover-view>
       </cover-view>
+
     </cover-view>
   </view>
   <van-tabbar style="width:{{ScreenTotalW}}rpx;height:{{TabBarH}}rpx;" active="{{active}}" border="{{false}}" bind:change="onTabChange">
@@ -37,6 +41,6 @@
 </view>
 <van-popup show="{{ rightPopShow }}" custom-style="height: 100%; width:30%" position="right" bind:close="onPopClose">
   <van-sidebar active-key="{{ curIndex }}" bind:change="onSceneChange">
-    <van-sidebar-item wx:for="{{panoramaNum}}" wx:key="sc" title="场景{{index}}" />
+    <van-sidebar-item wx:for="{{panoramaNum}}" wx:key="sc" title="场景{{index+1}}" />
   </van-sidebar>
 </van-popup>

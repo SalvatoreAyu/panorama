@@ -16,7 +16,13 @@
   align-items: center;
   justify-content: center;
 }
-
+.pop-del {
+  position: absolute;
+  top: 0;
+  right: 2%;
+  font-size: 40rpx;
+  
+}
 .label-container {
   position: absolute;
   top: 0;
@@ -31,6 +37,7 @@
 }
 
 .pop-container {
+  position: relative;
   width: 70%;
   height: 20%;
   background-color: #fff;
@@ -54,9 +61,10 @@
   font-size: 32rpx;
   display: block;
   z-index: 999999;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  /* overflow: hidden; */
+  text-overflow:ellipsis;
+  word-wrap:break-word;
+  /* text-overflow: ellipsis; */
 }
 
 .pop-btn {
@@ -86,13 +94,13 @@
   align-items: center;
   justify-content: center;
   color: #1989fa;
-  width: 100%;
+  /* width:; */
   font-size: 35rpx;
-  background: #1989fa;
+  /* background: #1989fa; */
 }
 
 .pop-complete cover-view {
-  color: #1989fa;
+  /* color: #1989fa; */
 }
 
 .label-item {

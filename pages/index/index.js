@@ -57,18 +57,18 @@ Page({
   documentTouchMove: function () {},
   documentTouchEnd: function () {},
   onLoad: function (options) {
-    // let srcList = JSON.parse(wx.getStorageSync('panoramaArr'))
-    // let srcList = JSON.parse(decodeURIComponent(options.srcList))
-    // this.setData({
-    //   totalArr: srcList
-    // })
-    // let num = JSON.parse(wx.getStorageSync('panoramaNum'))
-    // console.log(num);
-    // this.setData({
-    //   // srcList: this.data.totalArr[this.data.curIndex],
-    //   srcList: srcList,
-    //   panoramaNum: num
-    // })
+    let srcList = JSON.parse(decodeURIComponent(options.srcList))
+    console.log("sadasda",srcList);
+    this.setData({
+      totalArr: srcList
+    })
+    let num = JSON.parse(wx.getStorageSync('panoramaNum'))
+    console.log(num);
+    this.setData({
+      // srcList: this.data.totalArr[this.data.curIndex],
+      srcList: srcList,
+      panoramaNum: num
+    })
     // console.log(srcList);
     wx.cloud.init()
     wx.createSelectorQuery()
@@ -103,8 +103,8 @@ Page({
         // camera.position.set(0, 0, 0);
 
         // right left top bottom front back 
-        let sides = ['../../assets/room/r.jpg', '../../assets/room/l.jpg', '../../assets/room/u.jpg', '../../assets/room/d.jpg', '../../assets/room/f.jpg', '../../assets/room/b.jpg']
-        // let sides = this.data.srcList
+        // let sides = ['../../assets/room/r.jpg', '../../assets/room/l.jpg', '../../assets/room/u.jpg', '../../assets/room/d.jpg', '../../assets/room/f.jpg', '../../assets/room/b.jpg']
+        let sides = this.data.srcList
         console.log("XXXX", sides);
         let materials = [];
         for (let i = 0; i < sides.length; i++) {
@@ -115,7 +115,6 @@ Page({
             map: texture
           }));
         }
-        // 这里物体的长宽高，我始终不知道该是多少
         let mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(canvas.height, canvas.height, canvas.height), materials);
         // let mesh = new THREE.Mesh(new THREE.BoxGeometry(300, 300, 300, 7, 7, 7), materials);
         mesh.geometry.scale(-1, 1, 1);
@@ -146,7 +145,7 @@ Page({
 
         // 红线x，绿线y，蓝线z
         let axisHelper = new THREE.AxisHelper(300);
-        scene.add(axisHelper);
+        // scene.add(axisHelper);
         this.showPrePoints()
         scene.add(mesh);
 
@@ -196,6 +195,7 @@ Page({
   },
 
   longPress(e) {
+    this.panorama.controls.autoRotate = false
     console.log('fuck');
     let raycasterCubeMesh;
     let raycaster = new THREE.Raycaster();
@@ -338,7 +338,6 @@ Page({
   },
   onAutoPlayClick() {
     console.log('AutoPlayClick');
-    console.log(this.panorama);
     this.panorama.controls.autoRotate = !this.panorama.controls.autoRotate
   },
   onFullScreenClick() {
@@ -360,9 +359,9 @@ Page({
     this.setData({
       modelUploadHidden: false
     })
-    // this.data.srcList.map((item, index) =>
-    //   this.uploadFilePromise(pathName, item, index)
-    // )
+    this.data.srcList.map((item, index) =>
+      this.uploadFilePromise(pathName, item, index)
+    )
   },
   uploadFilePromise(pathName, url, index) {
     console.log("xx", pathName, url);
@@ -374,7 +373,7 @@ Page({
         console.log(res);
         this.setData({
           fileId: res.fileID,
-          uploadMessage: '上传成功，你的云id为' + this.data.fileId
+          uploadMessage: '上传成功，点击下方按钮复制云id'
         })
       },
       fail: err => {
@@ -399,17 +398,20 @@ Page({
   },
   onUploadCloudComplete() {
     wx.setClipboardData({
-      data: this.data.fileId,
+      data: this.data.fileId.slice(67),
       success(res) {
         wx.getClipboardData({
           success(res) {
             console.log(res.data) // data
           }
         })
-        this.setData({
-          modelUploadHidden: true
-        })
+
       }
+    })
+  },
+  hideModelUploadHidden (){
+    this.setData({
+      modelUploadHidden: true
     })
   },
   onScreenClick() {
@@ -467,7 +469,7 @@ Page({
     let widthHalf = 0.5 * this.data.ScreenTotalW / 2;
     let heightHalf = 0.5 * this.data.ScreenTotalH / 2;
 
-    obj.updateMatrixWorld();
+    obj.updateMatrixWorld();//更新
     vector.setFromMatrixPosition(obj.matrixWorld);
     vector.project(camera);
     vector.x = (vector.x * widthHalf) + widthHalf;

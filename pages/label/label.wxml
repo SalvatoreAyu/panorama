@@ -27,16 +27,15 @@
       <van-field wx:if="{{radio=='src'}}" left-icon="edit" style="font-size: 30rpx;" label="链接" clearable="true" autosize value="{{ src }}" placeholder="请输入图片url链接" border="{{ false }}" bind:change="onSrcChange" />
       <van-uploader wx:else file-list="{{ fileList }}" max-count="1" bind:after-read="afterRead" />
     </view>
-
   </view>
   <view class="postion-container">
     <view class="basic-wrapper">
       <view class="txt">位置信息</view>
     </view>
     <van-cell-group>
-      <van-field style="font-size: 30rpx;" disabled label="三维坐标X" autosize value="{{ position.x }}" placeholder="请输入标签名" border="{{ false }}" />
-      <van-field style="font-size: 30rpx;" disabled label="三维坐标Y" autosize value="{{ position.y }}" placeholder="请输入标签名" border="{{ false }}" />
-      <van-field style="font-size: 30rpx;" disabled label="三维坐标Z" autosize value="{{ position.z }}" placeholder="请输入标签名" border="{{ false }}" />
+      <van-field style="font-size: 30rpx;" label="三维坐标X" autosize value="{{ position.x }}" placeholder="请输入标签名" border="{{ false }}" />
+      <van-field style="font-size: 30rpx;" label="三维坐标Y" autosize value="{{ position.y }}" placeholder="请输入标签名" border="{{ false }}" />
+      <van-field style="font-size: 30rpx;" label="三维坐标Z" autosize value="{{ position.z }}" placeholder="请输入标签名" border="{{ false }}" />
     </van-cell-group>
   </view>
   <view class="label-btn-wrapper">
